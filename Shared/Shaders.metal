@@ -1,17 +1,10 @@
 #include <metal_stdlib>
+#include <simd/simd.h>
+
+// Including header shared between this Metal shader code and Swift/C code executing Metal API commands
+#include "Shaders_struct_BridgingHeader.h"
 
 using namespace metal;
-
-struct InstanceConstants {
-    float4x4 modelViewProjectionMatrix;
-    float4x4 normalMatrix;
-    float4 color;
-};
-
-struct VertexIn {
-    float3 position [[attribute(0)]];
-    float3 normal   [[attribute(1)]];
-};
 
 struct VertexOut {
     float4 position [[position]];
@@ -20,9 +13,9 @@ struct VertexOut {
 };
 
 vertex VertexOut vertex_main(VertexIn in [[stage_in]],
-                             constant InstanceConstants &instance [[buffer(1)]])
+                             constant const InstanceConstants &instance [[buffer(ShaderBufferIndex1)]])
 {
-    VertexOut out;
+    VertexOut out = {};
 
     float4 position(in.position, 1);
     float4 normal(in.normal, 0);

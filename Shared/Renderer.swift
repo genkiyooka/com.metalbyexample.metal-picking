@@ -7,11 +7,11 @@ struct RendererInitError: Error {
     var description: String
 }
 
-struct InstanceConstants {
-    var modelViewProjectionMatrix: float4x4
-    var normalMatrix: float4x4
-    var color: float4
-}
+//struct InstanceConstants {
+//    var modelViewProjectionMatrix: float4x4
+//    var normalMatrix: float4x4
+//    var color: float4
+//}
 
 let MaxInFlightFrameCount = 3
 
@@ -95,7 +95,7 @@ class Renderer {
         let worldMatrix = matrix_identity_float4x4
         
         let constantBuffer = constantBuffers[frameIndex]
-        renderCommandEncoder.setVertexBuffer(constantBuffer, offset:0, index: 1)
+        renderCommandEncoder.setVertexBuffer(constantBuffer, offset:0, index: ShaderBuffer.index1.rawValue)
         
         var constantOffset = 0
         draw(scene.rootNode,
@@ -118,7 +118,7 @@ class Renderer {
         let constantBuffer = constantBuffers[frameIndex]
         memcpy(constantBuffer.contents() + constantOffset, &constants, MemoryLayout<InstanceConstants>.size)
         
-        renderCommandEncoder.setVertexBufferOffset(constantOffset, index: 1)
+        renderCommandEncoder.setVertexBufferOffset(constantOffset, index: ShaderBuffer.index1.rawValue)
         
         if let mesh = node.mesh {
             for (index, vertexBuffer) in mesh.vertexBuffers.enumerated() {
